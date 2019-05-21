@@ -14,8 +14,10 @@ module OmniAuth
       option :bot_secret, nil
       option :button_config, {}
       
-      FIELDS      = %w[id first_name last_name username photo_url auth_date hash]
-      HASH_FIELDS = %w[auth_date first_name id last_name photo_url username]
+      FIELDS          = %w[id first_name last_name username photo_url auth_date hash]
+      OPTIONAL_FIELDS = %w[last_name username photo_url]
+      REQUIRED_FIELDS = %w[id first_name auth_date hash]
+      HASH_FIELDS     = %w[auth_date first_name id last_name photo_url username]
       
       def request_phase
         html = <<-HTML
@@ -81,7 +83,7 @@ module OmniAuth
       end
 
       def check_fields
-        FIELDS.all? { |f| request.params.include?(f) }
+        REQUIRED_FIELDS.all? { |f| request.params.include?(f) }
       end
       
       def check_signature
