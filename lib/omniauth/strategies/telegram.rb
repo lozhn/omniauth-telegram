@@ -88,7 +88,7 @@ module OmniAuth
       
       def check_signature
         secret = OpenSSL::Digest::SHA256.digest(options[:bot_secret])
-        signature = HASH_FIELDS.map { |f| "%s=%s" % [f, request.params[f]] }.join("\n")
+        signature = HASH_FIELDS.filter { |f| request.params[f] }.map{ |f| "%s=%s" % [f, request.params[f]] }.join("\n")
         hashed_signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA256.new, secret, signature)
         
         request.params["hash"] == hashed_signature
